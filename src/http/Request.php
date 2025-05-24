@@ -40,4 +40,10 @@ class Request {
     public function get(string $key, $default = null) {
         return $this->queryParams[$key] ?? $this->postData[$key] ?? $default;
     }
+
+    public function isHtmx(): bool
+    {
+        return isset($_SERVER['HTTP_HX_REQUEST']) && $_SERVER['HTTP_HX_REQUEST'] === 'true';
+    }
+    
 }
