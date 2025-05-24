@@ -1,0 +1,32 @@
+{
+    "name": "dinzin-tech/simple-mvc",
+    "description": "Simple MVC Framework for internal use",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Mallikarjun",
+            "email": "mallikarjun016.rymec@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^3.19",
+        "vlucas/phpdotenv": "^5.6",
+        "phpfastcache/phpfastcache": "^9.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "src/",
+            "Core\\Http\\": "src/http/",
+            "Core\\Middleware\\": "src/middleware/",
+            "Core\\Console\\": "src/console/"
+        }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.11"
+    },
+    "scripts": {
+        "lint": "phpcs --standard=PSR2 src/",
+        "test": "phpunit",
+        "serve": "php -S localhost:8000 -t public/"
+    }
+}

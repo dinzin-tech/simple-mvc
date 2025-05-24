@@ -1,0 +1,8 @@
+composer.lock
+/vendor
+/app
+/storage
+index.php
+.env
+/custom_cache
+/cache
