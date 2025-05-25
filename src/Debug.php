@@ -124,6 +124,8 @@ class Debug
         }
 
         $statusCode = http_response_code();
+        // get the HTTP method
+        $method = $_SERVER['REQUEST_METHOD'];
 
         // If 404, display an error message
         $statusColor = $statusCode == 200 ? '#4CAF50' : '#FF0000';
@@ -134,7 +136,7 @@ class Debug
         $url = $matchedRoute['url'] ?? 'N/A';
         $route = $matchedRoute['route'] ?? 'N/A';
         $controller = $matchedRoute['controller'] ?? 'Unknown Controller';
-        $method = $matchedRoute['method'] ?? 'Unknown Method';
+        $controllerMethod = $matchedRoute['method'] ?? 'Unknown Method';
 
         echo '<div id="debug-panel" style="
             position: fixed;
@@ -144,7 +146,7 @@ class Debug
             background-color: #222;
             color: #fff;
             font-family: Arial, sans-serif;
-            padding: 10px;
+            padding: 1px;
             border-top: 3px solid #ff9800;
             z-index: 9999;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
@@ -152,10 +154,10 @@ class Debug
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <strong>Status:</strong> <span style="color: ' . $statusColor . ';">' . $statusCode . ' (' . $statusText . ')</span> |
-                    <strong>URL:</strong> <span style="color: #2196F3;">' . htmlspecialchars($url) . '</span> |
+                    <strong>'.$method.' </strong> <span style="color: #2196F3;">' . htmlspecialchars($url) . '</span> |
                     <strong>Route:</strong> <span style="color: #4CAF50;">' . htmlspecialchars($route) . '</span> |
                     <strong>Controller:</strong> <span style="color: #FFEB3B;">' . htmlspecialchars($controller) . '</span> |
-                    <strong>Method:</strong> <span style="color: #FFEB3B;">' . htmlspecialchars($method) . '</span>
+                    <strong>Method:</strong> <span style="color: #FFEB3B;">' . htmlspecialchars($controllerMethodmethod) . '</span>
                 </div>
                 <button onclick="toggleDebug()" style="
                     background: #ff9800;
@@ -190,7 +192,7 @@ class Debug
                 <strong>Memory Usage:</strong> ' . $this->formatMemory($this->getMemoryUsage()) . '<br>
                 <strong>Peak Memory Usage:</strong> ' . $this->formatMemory($this->getPeakMemoryUsage()) . '<br>
                 
-                <strong>Included Files:</strong>
+                <br><strong>Included Files:</strong>
                 <ul style="list-style: none; padding-left: 0;">';
 
                 foreach (get_included_files() as $file) {
