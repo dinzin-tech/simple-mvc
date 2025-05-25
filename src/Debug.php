@@ -157,7 +157,7 @@ class Debug
                     <strong>'.$method.' </strong> <span style="color: #2196F3;">' . htmlspecialchars($url) . '</span> |
                     <strong>Route:</strong> <span style="color: #4CAF50;">' . htmlspecialchars($route) . '</span> |
                     <strong>Controller:</strong> <span style="color: #FFEB3B;">' . htmlspecialchars($controller) . '</span> |
-                    <strong>Method:</strong> <span style="color: #FFEB3B;">' . htmlspecialchars($controllerMethodmethod) . '</span>
+                    <strong>Method:</strong> <span style="color: #FFEB3B;">' . htmlspecialchars($controllerMethod) . '</span>
                 </div>
                 <button onclick="toggleDebug()" style="
                     background: #ff9800;
