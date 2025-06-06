@@ -8,6 +8,8 @@ class CommandManager
         'make:controller' => 'Core\Console\Commands\MakeController',
         'make:model' => 'Core\Console\Commands\MakeModel',
         'make:view' => 'Core\Console\Commands\MakeView',
+        'migrate:generate' => 'Core\Console\Commands\MigrationGenerateCommand',
+        'migrate:run' => 'Core\Console\Commands\MigrationRunCommand',
         'help' => 'Core\Console\Commands\HelpCommand',
     ];
 

@@ -7,9 +7,13 @@ class HelpCommand
     public function execute(array $arguments)
     {
         echo "Available commands:\n";
+        echo " --------------------------------------------------------------\n";
         echo "  make:controller [name] - Create a new controller\n";
         echo "  make:model [name]      - Create a new model\n";
         echo "  make:view [name]       - Create a new view\n";
+        echo "  ---------------------------------------------------------------\n";
+        echo "  migrate:generate       - Generate migration files\n";
+        echo "  migrate:run            - Run migrations\n";
         echo "  help                   - Show this help message\n";
     }
 }
