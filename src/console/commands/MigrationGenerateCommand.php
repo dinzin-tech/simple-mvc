@@ -11,7 +11,7 @@ class MigrationGenerateCommand
         sleep(1);
         \Core\Migration::generateMigrations();
         echo "-- Migration files generated successfully!\n";
-        echo "You can now run 'php bin/console migrate:run' to execute the migrations.\n";
+        echo "You can now run 'php bin/console migrations:run' to execute the migrations.\n";
         echo "Done!\n";
     }
 }

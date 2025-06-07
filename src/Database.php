@@ -51,7 +51,7 @@ class Database {
             $stmt = $this->connection->prepare($sql);
             $stmt->execute($params);
         } catch (PDOException $e) {
-            error_log('Database query error: ' . $e->getMessage());
+            error_log('Database query [' . $sql . '] error: ' . $e->getMessage());
             return false;
         }
 

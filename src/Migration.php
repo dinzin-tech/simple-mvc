@@ -48,9 +48,22 @@
         }
 
         public static function generateMigrations(): void {
+
+            echo "Scanning models for migration generation...\n";
             $models = self::getModels();
+            sleep(1); // Simulate processing time
+            if (empty($models)) {
+                echo "No models found. Please create models in the App/Models directory.\n";
+                return;
+            }
+            echo "Found " . count($models) . " models. Generating migration files...\n";
 
             foreach ($models as $modelClass) {
+                if (!class_exists($modelClass)) {
+                    echo "Model class $modelClass does not exist. Skipping...\n";
+                    continue;
+                }
+                echo "Processing model: $modelClass\n";
                 $sqls = self::generateMigrationSql($modelClass);
                 foreach ($sqls as $description => $sql) {
                     $filename = date('Y_m_d_His') . '_' . $description . '.sql';
@@ -79,7 +92,9 @@
             $table = $instance->getTable() ?? strtolower((new ReflectionClass($modelClass))->getShortName()) . 's';
             $db = Database::getInstance();
 
-            $existing = $db->fetch("SHOW TABLES LIKE :table", ['table' => $table]);
+            echo "Generating SQL for model: $modelClass, table: $table\n";
+
+            $existing = $db->fetch("SHOW TABLES LIKE ?", ['table' => $table]);
             $sqls = [];
 
             if (!$existing) {
@@ -115,10 +130,16 @@
                 }
             }
 
+            echo "Generated " . count($sqls) . " SQL statements for model: $modelClass\n";
+            echo "SQL statements: " . implode(", ", array_keys($sqls)) . "\n";
+            // print_r($sqls);
+            // exit(0);
+
             return $sqls;
         }
 
         private static function mapPropertyToColumn(ReflectionProperty $property): array {
+            echo "Mapping property: " . $property->getName() . "\n";
             $name = $property->getName();
             $type = $property->getType();
             $nullable = 'NULL';
