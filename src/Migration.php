@@ -24,9 +24,12 @@
                 if (!str_ends_with($file, '.sql')) continue;
 
                 $sql = file_get_contents(self::$migrationsPath . '/' . $file);
-                echo "Executing: $file\n";
+                echo "-- Executing: $file\n";
                 $db->query($sql);
                 $db->query("INSERT INTO migrations (filename) VALUES (:filename)", ['filename' => $file]);
+                sleep(1); // Simulate processing time
+                echo "-- Migration $file executed successfully.\n";
+                
             }
         }
 
@@ -49,26 +52,27 @@
 
         public static function generateMigrations(): void {
 
-            echo "Scanning models for migration generation...\n";
+            echo "-- Scanning models for migration generation...\n";
             $models = self::getModels();
             sleep(1); // Simulate processing time
             if (empty($models)) {
-                echo "No models found. Please create models in the App/Models directory.\n";
+                echo "-- No models found. Please create models in the App/Models directory.\n";
                 return;
             }
-            echo "Found " . count($models) . " models. Generating migration files...\n";
+            echo "-- Found " . count($models) . " models. Generating migration files...\n";
 
             foreach ($models as $modelClass) {
                 if (!class_exists($modelClass)) {
-                    echo "Model class $modelClass does not exist. Skipping...\n";
+                    echo "-- Model class $modelClass does not exist. Skipping...\n";
                     continue;
                 }
-                echo "Processing model: $modelClass\n";
+                echo "- Processing model: $modelClass\n";
                 $sqls = self::generateMigrationSql($modelClass);
                 foreach ($sqls as $description => $sql) {
                     $filename = date('Y_m_d_His') . '_' . $description . '.sql';
                     file_put_contents(self::$migrationsPath . '/' . $filename, $sql);
-                    echo "Generated migration: $filename\n";
+                    echo "-- Generated migration: $filename\n";
+                    sleep(1);
                 }
             }
         }
@@ -92,16 +96,23 @@
             $table = $instance->getTable() ?? strtolower((new ReflectionClass($modelClass))->getShortName()) . 's';
             $db = Database::getInstance();
 
-            echo "Generating SQL for model: $modelClass, table: $table\n";
+            echo "-- Generating SQL for model: $modelClass, table: $table\n";
 
-            $existing = $db->fetch("SHOW TABLES LIKE ?", ['table' => $table]);
+            $escapedTable = $db->getConnection()->quote($table);
+
+            $existing = $db->fetch("SHOW TABLES LIKE $escapedTable");
             $sqls = [];
+
+            echo "-- Checking if table $table exists...\n";
+            $existing = !empty($existing);
+            sleep(1); // Simulate processing time
+            echo $existing ? "-- Table $table exists.\n" : "-- Table $table does not exist.\n";
 
             if (!$existing) {
                 // Generate CREATE TABLE
                 $columns = ["`id` INT AUTO_INCREMENT PRIMARY KEY"];
                 foreach ((new ReflectionClass($modelClass))->getProperties() as $prop) {
-                    if ($prop->getName() === 'id' || $prop->isStatic()) continue;
+                    if ($prop->getName() === 'id' || $prop->getDeclaringClass()->getName() === 'Core\Model' || $prop->isStatic()) continue;
                     [$col, $type] = self::mapPropertyToColumn($prop);
                     $columns[] = "`$col` $type";
                 }
@@ -114,7 +125,7 @@
                 $modelProps = (new ReflectionClass($modelClass))->getProperties();
                 $modelMap = [];
                 foreach ($modelProps as $prop) {
-                    if ($prop->getName() === 'id' || $prop->isStatic()) continue;
+                    if ($prop->getName() === 'id' || $prop->getDeclaringClass()->getName() === 'Core\Model' || $prop->isStatic()) continue;
                     [$col, $type] = self::mapPropertyToColumn($prop);
                     $modelMap[$col] = $type;
                 }
@@ -130,16 +141,14 @@
                 }
             }
 
-            echo "Generated " . count($sqls) . " SQL statements for model: $modelClass\n";
-            echo "SQL statements: " . implode(", ", array_keys($sqls)) . "\n";
-            // print_r($sqls);
-            // exit(0);
+            echo "-- Generated " . count($sqls) . " SQL statements for model: $modelClass\n";
+            echo "-- SQL statements: " . implode(", ", array_keys($sqls)) . "\n";
 
             return $sqls;
         }
 
         private static function mapPropertyToColumn(ReflectionProperty $property): array {
-            echo "Mapping property: " . $property->getName() . "\n";
+            
             $name = $property->getName();
             $type = $property->getType();
             $nullable = 'NULL';

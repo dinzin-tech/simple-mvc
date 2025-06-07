@@ -11,6 +11,8 @@ class CommandManager
         'migrations:create' => 'Core\Console\Commands\MigrationGenerateCommand',
         'migrations:run' => 'Core\Console\Commands\MigrationRunCommand',
         'help' => 'Core\Console\Commands\HelpCommand',
+        '-h' => 'Core\Console\Commands\HelpCommand',
+        'console:setup' => 'Core\Console\Commands\ConsoleSetupCommand',
     ];
 
     public function run(array $args)
