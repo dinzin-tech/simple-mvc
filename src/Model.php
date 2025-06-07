@@ -73,7 +73,12 @@ abstract class Model {
         }
 
         $rows = $instance->db->fetchAll($sql, $params);
-        return array_map(fn($row) => (new static())->hydrate($row), $rows);
+        // return array_map(fn($row) => (new static())->hydrate($row), $rows);
+        return array_map(function ($row) {
+            $obj = new static();
+            $obj->hydrate($row);
+            return $obj;
+        }, $rows);
     }
 
     public static function findAll(): array {
@@ -89,7 +94,7 @@ abstract class Model {
             if ($property->getName() === $this->primaryKey && empty($this->{$this->primaryKey})) {
                 continue;
             }
-            
+
             $data[$property->getName()] = $this->{$property->getName()};
         }
 
