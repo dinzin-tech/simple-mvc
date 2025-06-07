@@ -6,7 +6,7 @@
     use Core\Session;
     use Core\Http\Request;
 	
-	class Form
+	class Form_Old
 	{
 		private array  $fields            = [];
 		private string $csrfToken;

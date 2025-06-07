@@ -10,8 +10,8 @@ abstract class Model {
     protected string $table;
     protected string $primaryKey = 'id';
 
-    public function __construct(string $dbName = 'DEFAULT') {
-        $this->db = Database::getInstance($dbName);
+    public function __construct() {
+        $this->db = Database::getInstance();
         
         if (!$this->table) {
             $this->table = strtolower((new ReflectionClass($this))->getShortName()) . 's';

@@ -20,15 +20,6 @@ class CommandManager
 
         define('BASE_PATH_IN_COMMANDS', dirname(__DIR__, 5));
 
-        // load environment variables
-        if (file_exists(BASE_PATH_IN_COMMANDS . '/.env')) {
-            $dotenv = \Dotenv\Dotenv::createImmutable(BASE_PATH_IN_COMMANDS);
-            $dotenv->load();
-        } else {
-            echo "Environment file not found. Please create a .env file.\n";
-            return;
-        }
-
         if (!isset($this->commands[$command])) {
             echo "Command not recognized. Use 'php bin/console help' for assistance.\n";
             return;
