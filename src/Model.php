@@ -18,6 +18,11 @@ abstract class Model {
         }
     }
 
+    public function getTable()
+    {
+        return $this->table;
+    }
+
     public function hydrate(array $data): void {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
