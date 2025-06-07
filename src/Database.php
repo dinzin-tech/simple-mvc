@@ -14,10 +14,10 @@ class Database {
 
     private function __construct(string $name) {
         try {
-            $host     = $_ENV(strtoupper($name) . '_DB_HOST');
-            $dbname   = $_ENV(strtoupper($name) . '_DB_DATABASE');
-            $user     = $_ENV(strtoupper($name) . '_DB_USER');
-            $password = $_ENV(strtoupper($name) . '_DB_PASSWORD');
+            $host     = $_ENV[strtoupper($name) . '_DB_HOST'];
+            $dbname   = $_ENV[strtoupper($name) . '_DB_DATABASE'];
+            $user     = $_ENV[strtoupper($name) . '_DB_USER'];
+            $password = $_ENV[strtoupper($name) . '_DB_PASSWORD'];
 
             $dsn = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
             $options = [
