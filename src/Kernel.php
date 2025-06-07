@@ -19,6 +19,9 @@ class Kernel
      */
     public function boot(): void
     {
+        // Start the session
+        Session::start();
+        
         // Initialize the router
         $this->router = new Router();
         $this->debug = new Debug($this->router);

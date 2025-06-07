@@ -85,6 +85,11 @@ abstract class Model {
         $data = [];
 
         foreach ($properties as $property) {
+            // Skip the primary key if it's not set, to avoid overwriting it on create
+            if ($property->getName() === $this->primaryKey && empty($this->{$this->primaryKey})) {
+                continue;
+            }
+            
             $data[$property->getName()] = $this->{$property->getName()};
         }
 

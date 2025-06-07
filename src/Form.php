@@ -260,8 +260,16 @@ class Form
         return empty($this->errors);
     }
 
-    private function validateCSRFToken(?string $token): bool
+    public function isSubmitted(): bool
     {
+        return $_SERVER['REQUEST_METHOD'] === 'POST';
+    }
+
+    private function validateCSRFToken(string $token): bool
+    {
+        if (!$this->csrfToken) {
+            throw new \RuntimeException('CSRF token not set.');
+        }
         return hash_equals($this->csrfToken, $token ?? '');
     }
 

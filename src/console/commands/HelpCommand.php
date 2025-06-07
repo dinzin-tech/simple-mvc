@@ -23,18 +23,18 @@ class HelpCommand
         echo "  --------------------------------------------------------------\n";
         echo "  This console provides a set of commands to help you manage your Simple MVC application.\n";
         echo "  To get started, type 'help' to see a list of available commands.\n";
-        echo "  Below is a list of available commands:\n";
-        echo "  --------------------------------------------------------------\n";
+        echo "  Below is a list of available commands:\n\r";
+        echo "  --------------------------------------------------------------\n\r";
         echo "  help, -h               - Show this help message\n";
         echo "  console:setup          - Setup console file\n";
         echo "  app:setup              - Setup app, load migration system\n";
-        echo "  --------------------------------------------------------------\n";
+        echo "  --------------------------------------------------------------\n\r";
         echo "  make:controller [name] - Create a new controller\n";
         echo "  make:model [name]      - Create a new model\n";
         echo "  make:view [name]       - Create a new view\n";
-        echo "  ---------------------------------------------------------------\n";
+        echo "  ---------------------------------------------------------------\n\r";
         echo "  migrations:create      - Generate migration files\n";
         echo "  migrations:run         - Run migrations\n";
-        echo "  ---------------------------------------------------------------\n";
+        echo "  ---------------------------------------------------------------\n\r";
     }
 }
