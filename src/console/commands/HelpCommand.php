@@ -14,8 +14,8 @@ class HelpCommand
         echo "  make:model [name]      - Create a new model\n";
         echo "  make:view [name]       - Create a new view\n";
         echo "  ---------------------------------------------------------------\n";
-        echo "  migrate:generate       - Generate migration files\n";
-        echo "  migrate:run            - Run migrations\n";
+        echo "  migrations:create      - Generate migration files\n";
+        echo "  migrations:run         - Run migrations\n";
         echo "  ---------------------------------------------------------------\n";
     }
 }

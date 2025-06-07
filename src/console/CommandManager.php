@@ -8,8 +8,8 @@ class CommandManager
         'make:controller' => 'Core\Console\Commands\MakeController',
         'make:model' => 'Core\Console\Commands\MakeModel',
         'make:view' => 'Core\Console\Commands\MakeView',
-        'migrate:generate' => 'Core\Console\Commands\MigrationGenerateCommand',
-        'migrate:run' => 'Core\Console\Commands\MigrationRunCommand',
+        'migrations:create' => 'Core\Console\Commands\MigrationGenerateCommand',
+        'migrations:run' => 'Core\Console\Commands\MigrationRunCommand',
         'help' => 'Core\Console\Commands\HelpCommand',
     ];
 
@@ -19,6 +19,15 @@ class CommandManager
         $arguments = array_slice($args, 2);
 
         define('BASE_PATH_IN_COMMANDS', dirname(__DIR__, 5));
+
+        // load environment variables
+        if (file_exists(BASE_PATH_IN_COMMANDS . '/.env')) {
+            $dotenv = \Dotenv\Dotenv::createImmutable(BASE_PATH_IN_COMMANDS);
+            $dotenv->load();
+        } else {
+            echo "Environment file not found. Please create a .env file.\n";
+            return;
+        }
 
         if (!isset($this->commands[$command])) {
             echo "Command not recognized. Use 'php bin/console help' for assistance.\n";
