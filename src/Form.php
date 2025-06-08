@@ -240,6 +240,10 @@ class Form
     {
         $this->errors = [];
 
+        if (!$this->isSubmitted()) {
+            return false;
+        }
+
         foreach ($this->fields as $field) {
             $value = $field['value'];
             $options = $field['options'];
@@ -267,8 +271,8 @@ class Form
 
     private function validateCSRFToken(string $token): bool
     {
-        if (!$this->csrfToken) {
-            throw new \RuntimeException('CSRF token not set.');
+        if (empty($token)) {
+            throw new \RuntimeException('CSRF token is missing.');
         }
         return hash_equals($this->csrfToken, $token ?? '');
     }

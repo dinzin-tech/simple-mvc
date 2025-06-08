@@ -18,7 +18,8 @@
             "Core\\": "src/",
             "Core\\Http\\": "src/http/",
             "Core\\Middleware\\": "src/middleware/",
-            "Core\\Console\\": "src/console/"
+            "Core\\Console\\": "src/console/",
+            "Core\\Console\\Commands": "src/console/commands/"
         }
     },
     "require-dev": {

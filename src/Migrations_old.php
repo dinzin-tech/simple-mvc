@@ -5,7 +5,7 @@
     use PDO;
     use PDOException;
 	
-	class Migrations
+	class Migrations_old
 	{
 		private $db;
 		

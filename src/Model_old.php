@@ -2,23 +2,24 @@
 
 namespace Core;
 
-use Core\Attributes\Column;
 use ReflectionClass;
 use ReflectionProperty;
 
-abstract class Model {
+abstract class Model_old {
     protected Database $db;
     protected string $table;
     protected string $primaryKey = 'id';
 
     public function __construct() {
         $this->db = Database::getInstance();
-        if (!isset($this->table)) {
+        
+        if (!$this->table) {
             $this->table = strtolower((new ReflectionClass($this))->getShortName()) . 's';
         }
     }
 
-    public function getTable(): string {
+    public function getTable()
+    {
         return $this->table;
     }
 
@@ -72,6 +73,7 @@ abstract class Model {
         }
 
         $rows = $instance->db->fetchAll($sql, $params);
+        // return array_map(fn($row) => (new static())->hydrate($row), $rows);
         return array_map(function ($row) {
             $obj = new static();
             $obj->hydrate($row);
@@ -88,9 +90,11 @@ abstract class Model {
         $data = [];
 
         foreach ($properties as $property) {
+            // Skip the primary key if it's not set, to avoid overwriting it on create
             if ($property->getName() === $this->primaryKey && empty($this->{$this->primaryKey})) {
                 continue;
             }
+
             $data[$property->getName()] = $this->{$property->getName()};
         }
 
@@ -101,10 +105,10 @@ abstract class Model {
         $columns = implode(", ", array_keys($data));
         $placeholders = ":" . implode(", :", array_keys($data));
         $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
-
+        
         $this->db->query($sql, $data);
         $this->{$this->primaryKey} = $this->db->lastInsertId();
-
+        
         return $this;
     }
 
@@ -118,7 +122,7 @@ abstract class Model {
 
         $sql = "UPDATE {$this->table} SET " . implode(", ", $fields) . " WHERE {$this->primaryKey} = :{$this->primaryKey}";
         $this->db->query($sql, $data);
-
+        
         return $this;
     }
 

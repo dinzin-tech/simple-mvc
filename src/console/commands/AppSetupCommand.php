@@ -13,28 +13,28 @@ class AppSetupCommand
 
         // You can implement a check for new migrations here
         // check migrations table exists
-        $migrationsTableExists = $db->query("SHOW TABLES LIKE 'migrations'")->fetch();
-        sleep(1);
-        echo "-- Checking migrations table...\n";
-        sleep(1);
+        // $migrationsTableExists = $db->query("SHOW TABLES LIKE 'migrations'")->fetch();
+        // sleep(1);
+        // echo "-- Checking migrations table...\n";
+        // sleep(1);
 
-        if ($migrationsTableExists) {
-            echo "-- Migrations table found.\n";
+        // if ($migrationsTableExists) {
+        //     echo "-- Migrations table found.\n";
 
-        } else {
-            echo "-- Migrations table not found.\n";
-            echo "-- Creating migrations table...\n";
-            sleep(1);
-            // If the migrations table does not exist, we can create it
-            $db->query("CREATE TABLE IF NOT EXISTS migrations (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                filename VARCHAR(255) NOT NULL,
-                ran_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-            );")->execute();
-            echo "-- Migrations table created.\n";
-            sleep(1);
-            // $migrationsTableExists = true; // Set to true since we just created it
-        }
+        // } else {
+        //     // echo "-- Migrations table not found.\n";
+        //     // echo "-- Creating migrations table...\n";
+        //     // sleep(1);
+        //     // // If the migrations table does not exist, we can create it
+        //     // $db->query("CREATE TABLE IF NOT EXISTS migrations (
+        //     //     id INT AUTO_INCREMENT PRIMARY KEY,
+        //     //     filename VARCHAR(255) NOT NULL,
+        //     //     ran_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        //     // );")->execute();
+        //     // echo "-- Migrations table created.\n";
+        //     // sleep(1);
+        //     // $migrationsTableExists = true; // Set to true since we just created it
+        // }
 
 
         // first check if the migrations directory exists

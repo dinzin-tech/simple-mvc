@@ -27,7 +27,7 @@ use Core\Console\CommandManager;
 
 // Check if a command is passed
 if (\$argc < 2) {
-    echo "No command provided. Use 'php console.php help' for a list of commands.\n";
+    echo "No command provided. Use 'php bin/console help' for a list of commands.\n";
     exit(1);
 }
 
