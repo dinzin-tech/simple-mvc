@@ -20,7 +20,8 @@
             "Core\\Middleware\\": "src/middleware/",
             "Core\\Console\\": "src/console/",
             "Core\\Attributes\\": "src/attributes/",
-            "Core\\Console\\Commands\\": "src/console/commands/"
+            "Core\\Console\\Commands\\": "src/console/commands/",
+            "Core\\Migrations\\": "src/migrations/"
         }
     },
     "require-dev": {
