@@ -197,7 +197,8 @@
                 sleep(1); // Simulate processing time
 
                 foreach ($sqls as $description => [$upSql, $downSql]) {
-                    $filename = date('Y_m_d_His') . '_' . $description . '.php';
+                    $migrationClassName = $description .'_'. date('YmdHis');
+                    $filename = $migrationClassName . '.php';
                     $filepath = self::$migrationsPath . '/' . $filename;
 
                     $content = <<<PHP
@@ -206,14 +207,14 @@
 use Core\MigrationBase;
 
 return new class extends MigrationBase {
-    public function up() {
+    public function up(): void {
         \$this->exec(<<<SQL
 $upSql
 SQL
         );
     }
 
-    public function down() {
+    public function down(): void {
         \$this->exec(<<<SQL
 $downSql
 SQL
