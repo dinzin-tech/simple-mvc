@@ -206,7 +206,7 @@
 
 use Core\MigrationBase;
 
-return new class extends MigrationBase {
+class $migrationClassName extends MigrationBase {
     public function up(): void {
         \$this->exec(<<<SQL
 $upSql
