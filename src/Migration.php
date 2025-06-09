@@ -204,6 +204,8 @@
                     $content = <<<PHP
 <?php
 
+namespace Migrations;
+
 use Core\MigrationBase;
 
 class $migrationClassName extends MigrationBase {
