@@ -36,6 +36,11 @@ class MigrationRunCommand
             echo "Done!\n";
             echo "-- You can now check your database for the applied changes.\n";
 
+        } elseif ($command === 'status') {
+            echo "-- Checking migration status...\n";
+            \Core\Migration::status();
+            echo "\n-- Done!\n";
+            
         } else {
             echo "Invalid command. Use 'migrations run' or 'migrations rollback'.\n";
         }

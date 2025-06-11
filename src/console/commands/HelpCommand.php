@@ -36,5 +36,29 @@ class HelpCommand
         echo "  migrations:create           - Generate migration files\n";
         echo "  migrations:run [command]    - Run migration command 'run' or 'rollback'\n";
         echo "  ---------------------------------------------------------------\n\r";
+
+        // show the commands registered in the CommandManager
+        // echo "  Additional commands can be registered in the CommandManager.\n";
+        // echo "  To register a new command, create a class in the 'App\\Commands' namespace\n";
+        // echo "  and implement the 'execute' method. The command will be automatically registered.\n";
+        // echo "  ---------------------------------------------------------------\n\r";
+        // echo "  For more information on how to use the console, visit the documentation at:\n";
+
+        // scan the commands directory for additional commands
+        // $commandsDir = BASE_PATH_IN_COMMANDS . '/commands';
+        // if (is_dir($commandsDir)) {
+        //     $commandFiles = glob($commandsDir . '/*.php');
+        //     if (!empty($commandFiles)) {
+        //         echo "  Available commands:\n";
+        //         foreach ($commandFiles as $file) {
+        //             $commandName = basename($file, '.php');
+        //             echo "    - " . strtolower(str_replace('Command', '', $commandName)) . "\n";
+        //         }
+        //     } else {
+        //         echo "  No additional commands found in the 'commands' directory.\n";
+        //     }
+        // } else {
+        //     echo "  The 'commands' directory does not exist.\n";
+        // }
     }
 }
