@@ -34,7 +34,7 @@ class HelpCommand
         echo "  make:view [name]       - Create a new view\n";
         echo "  ---------------------------------------------------------------\n\r";
         echo "  migrations:create           - Generate migration files\n";
-        echo "  migrations:run [command]    - Run migration command 'run' or 'rollback'\n";
+        echo "  migrations:exec [command]   - Run migration, commands: 'run','rollback' and 'status'\n";
         echo "  ---------------------------------------------------------------\n\r";
 
         // show the commands registered in the CommandManager
