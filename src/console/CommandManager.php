@@ -9,7 +9,7 @@ class CommandManager
         'make:model' => 'Core\Console\Commands\MakeModel',
         'make:view' => 'Core\Console\Commands\MakeView',
         'migrations:create' => 'Core\Console\Commands\MigrationGenerateCommand',
-        'migrations:run' => 'Core\Console\Commands\MigrationRunCommand',
+        'migrations:exec' => 'Core\Console\Commands\MigrationRunCommand',
         'help' => 'Core\Console\Commands\HelpCommand',
         '-h' => 'Core\Console\Commands\HelpCommand',
         'console:setup' => 'Core\Console\Commands\ConsoleSetupCommand',
