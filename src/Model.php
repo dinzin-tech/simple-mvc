@@ -22,10 +22,25 @@ abstract class Model {
         return $this->table;
     }
 
+    // public function hydrate(array $data): void {
+    //     foreach ($data as $key => $value) {
+    //         if (property_exists($this, $key)) {
+    //             $this->$key = $value;
+    //         }
+    //     }
+    // }
+
     public function hydrate(array $data): void {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
-                $this->$key = $value;
+                $property = new \ReflectionProperty($this, $key);
+                $type = $property->getType()?->getName();
+
+                if ($type === \DateTime::class && is_string($value)) {
+                    $this->$key = new \DateTime($value);
+                } else {
+                    $this->$key = $value ?? '';
+                }
             }
         }
     }
@@ -94,10 +109,33 @@ abstract class Model {
             $data[$property->getName()] = $this->{$property->getName()};
         }
 
+        // Remove empty values
+        $data = $this->removeEmptyProps($data);
+
         return !empty($this->{$this->primaryKey}) ? $this->update($data) : $this->create($data);
     }
 
+    private function removeEmptyProps(array $data): array {
+        return array_filter($data, function ($value) {
+            return $value !== null && $value !== '';
+        });
+
+        // remove empty values
+        // $data = array_filter($data, function ($value) {
+        //     return ($value !== '' && $value !== null);
+        // });
+    }
+
     private function create(array $data): static {
+        
+        // remove empty values
+        $data = $this->removeEmptyProps($data);
+
+        // Ensure that data is not empty
+        if (empty($data)) {
+            throw new \InvalidArgumentException("No data provided for insert.");
+        }
+
         $columns = implode(", ", array_keys($data));
         $placeholders = ":" . implode(", :", array_keys($data));
         $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
@@ -109,6 +147,15 @@ abstract class Model {
     }
 
     private function update(array $data): static {
+
+        // Ensure that the primary key is set
+        if (empty($this->{$this->primaryKey})) {
+            throw new \InvalidArgumentException("Primary key is not set for update.");
+        }
+
+        // remove empty values
+        $data = $this->removeEmptyProps($data);
+
         $fields = [];
         foreach ($data as $key => $value) {
             if ($key !== $this->primaryKey) {
