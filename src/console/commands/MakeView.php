@@ -11,17 +11,31 @@ class MakeView
             return;
         }
 
-        $viewName = ucfirst($arguments[0]);
-        $path = __DIR__ . '/../../../app/views/' . $viewName . '.php';
+        $viewName = $arguments[0];
+        $path = realpath(BASE_PATH_IN_COMMANDS . "/app/views");
+        
+        // Ensure the directory exists, or create it if it doesn't
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
 
-        if (file_exists($path)) {
-            echo "Model already exists!\n";
+        $filePath = $path . DIRECTORY_SEPARATOR . $viewName . '.html.twig';
+
+        // Handle subdirectories like auth/login
+        $directory = dirname($filePath);
+
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true); // Recursively create directories
+        }
+
+        if (file_exists($filePath)) {
+            echo "View $viewName already exists!\n";
             return;
         }
 
         $content = "{% extends 'layout.html.twig' %}\n\n{% block title %}Blank Page{% endblock %}\n\n{% block content %}\n    <h1>Blank Page</h1>\n    <p>This is a blank page.</p>\n{% endblock %}\n";
 
-        file_put_contents($path, $content);
+        file_put_contents($filePath, $content);
         echo "View $viewName created successfully.\n";
     }
 }
