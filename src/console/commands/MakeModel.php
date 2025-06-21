@@ -12,7 +12,8 @@ class MakeModel
         }
 
         $modelName = ucfirst($arguments[0]);
-        $path = __DIR__ . '/../../../app/models/' . $modelName . '.php';
+        // $path = __DIR__ . '/../../../app/models/' . $modelName . '.php';
+        $path = realpath(BASE_PATH_IN_COMMANDS . "/app/models") . DIRECTORY_SEPARATOR . $modelName . '.php';
 
         if (file_exists($path)) {
             echo "Model already exists!\n";
