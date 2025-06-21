@@ -20,7 +20,7 @@ class MakeModel
             return;
         }
 
-        $content = "<?php\n\nnamespace App\Models;\n\nuse Core\Model;\n\nclass $modelName extends Model\n{\n    // Define your model properties and methods here\n}\n";
+        $content = "<?php\n\nnamespace App\Models;\n\nuse Core\Model;\nuse Core\Attributes\Column;\n\nclass $modelName extends Model\n{\n    // Define your model properties and methods here\n}\n";
 
         file_put_contents($path, $content);
         echo "Model $modelName created successfully.\n";
