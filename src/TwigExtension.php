@@ -41,14 +41,41 @@ class TwigExtension extends AbstractExtension
 
     /**
      * Generate URL for a named route.
-     * For example: {{ route('home') }}
+     * For example: {{ route('user_profile', {'id': 42, 'tab': 'settings'}) }}
      *
      * @param string $name
      * @param array $params
      * @return string
      */
-    public function generateRoute($name, $params = []): string
+    public function generateRoute(string $name, array $params = []): string
     {
-        return $this->router->getRouteByName($name/*, $params*/);
+        $path = $this->router->getRouteByName($name);
+
+        if ($path === null) {
+            return '#'; // fallback if route not found
+        }
+
+        // Find all placeholders in the route (e.g., {id}, {slug})
+        preg_match_all('/{(\w+)}/', $path, $matches);
+        $routeParams = $matches[1] ?? [];
+
+        // Replace each placeholder with provided value or leave as-is
+        foreach ($routeParams as $paramName) {
+            if (isset($params[$paramName])) {
+                $path = str_replace("{" . $paramName . "}", urlencode((string) $params[$paramName]), $path);
+                unset($params[$paramName]); // Remove used param
+            } else {
+                // Optional: If parameter is missing, you can choose to leave it or remove it
+                // e.g., /user/{id} → /user/ if id is not provided
+                $path = str_replace("{" . $paramName . "}", '', $path);
+            }
+        }
+
+        // Append any remaining parameters as query string
+        if (!empty($params)) {
+            $path .= '?' . http_build_query($params);
+        }
+
+        return $path;
     }
 }
