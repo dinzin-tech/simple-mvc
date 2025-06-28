@@ -106,7 +106,7 @@ abstract class Model {
             if ($property->getName() === $this->primaryKey && empty($this->{$this->primaryKey})) {
                 continue;
             }
-            $data[$property->getName()] = $this->{$property->getName()};
+            $data[$property->getName()] = $this->{$property->getName()} ?? null;
         }
 
         // Remove empty values
