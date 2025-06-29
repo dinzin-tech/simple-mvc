@@ -67,7 +67,30 @@ class Router
         $this->scanControllers();
         // add routes from the routes.php file if needed
         // require_once dirname(__DIR__) . '/routes.php';
+
+        // load middlewares if any
+        $this->loadMiddlewareConfig(BASE_PATH . '/config/middlewares.yml');
+
     }
+
+    /**
+     * Load middleware configuration from a YAML file.
+     * 
+     * @param string $filePath Path to the YAML file.
+     */
+    protected function loadMiddlewareConfig($filePath)
+    {
+        if (!file_exists($filePath)) return;
+
+        $middlewareMap = \Symfony\Component\Yaml\Yaml::parseFile($filePath);
+
+        foreach ($middlewareMap as $path => $middlewares) {
+            if (isset($this->routes[$path])) {
+                $this->routes[$path]['middlewares'] = $middlewares;
+            }
+        }
+    }
+
 
     /**
      * Process a controller class and register its routes.
@@ -161,7 +184,8 @@ class Router
             'controller' => $controller,
             'action' => $action,
             'methods' => array_map('strtoupper', $methods),
-            'name' => $name
+            'name' => $name,
+            'middlewares' => [] // Initialize middlewares as an empty array
         ];
     }
 
@@ -196,10 +220,19 @@ class Router
                         ];
 
                         if (method_exists($controller, $actionName)) {
-                            $this->response = call_user_func_array(
-                                [$controller, $actionName], 
-                                array_merge([$request], $matches)
-                            );
+                            // $this->response = call_user_func_array(
+                            //     [$controller, $actionName], 
+                            //     array_merge([$request], $matches)
+                            // );
+
+                            $middlewareRunner = new \Core\MiddlewareHandler($route['middlewares'] ?? []);
+
+                            $this->response = $middlewareRunner->handle($request, function ($request) use ($controller, $actionName, $matches) {
+                                return call_user_func_array(
+                                    [$controller, $actionName],
+                                    array_merge([$request], $matches)
+                                );
+                            });
                             return;
                         } else {
                             $this->sendNotFound("Action {$actionName} not found.");
