@@ -26,6 +26,12 @@ class Response {
         return $this;
     }
 
+    public function setHeader(string $name, string $value): self {
+        // Overwrite the header if it already exists
+        $this->headers[$name] = $value;
+        return $this;
+    }
+
     public function setContent(string $content): self {
         $this->content = $content;
         return $this;
