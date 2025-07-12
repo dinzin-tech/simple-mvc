@@ -58,7 +58,7 @@ class Form
         $this->fields[$name] = new Field($type, $name, $value, $options);
     }
 
-    public function add(string $name, string $type, mixed $value = null, array $options = []): void
+    public function add(string $type, string $name, mixed $value = null, array $options = []): void
     {
         $this->addField($type, $name, $value, $options);
     }

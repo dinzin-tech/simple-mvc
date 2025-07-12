@@ -35,6 +35,9 @@ class HelpCommand
         echo "  ---------------------------------------------------------------\n\r";
         echo "  migrations:create           - Generate migration files\n";
         echo "  migrations:exec [command]   - Run migration, commands: 'run','rollback' and 'status'\n";
+        echo "  migrations run              - Run migration\n";
+        echo "  migrations status           - Show migration status\n";
+        echo "  migrations rollback         - Rollback migration\n";
         echo "  ---------------------------------------------------------------\n\r";
 
         // show the commands registered in the CommandManager

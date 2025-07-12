@@ -10,6 +10,7 @@ class CommandManager
         'make:view' => 'Core\Console\Commands\MakeView',
         'migrations:create' => 'Core\Console\Commands\MigrationGenerateCommand',
         'migrations:exec' => 'Core\Console\Commands\MigrationRunCommand',
+        'migrations' => 'Core\Console\Commands\MigrationRunCommand',
         'help' => 'Core\Console\Commands\HelpCommand',
         '-h' => 'Core\Console\Commands\HelpCommand',
         'console:setup' => 'Core\Console\Commands\ConsoleSetupCommand',
