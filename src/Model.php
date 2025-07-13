@@ -196,4 +196,32 @@ abstract class Model {
 
         return (int) $instance->db->fetch($sql, $params)['COUNT(*)'];
     }
+
+    public function toArray(): array {
+        $reflection = new \ReflectionClass($this);
+        $properties = $reflection->getProperties();
+        $data = [];
+
+        // Properties to exclude from serialization
+        $excluded = ['db', 'table', 'primaryKey', 'password'];
+
+        foreach ($properties as $property) {
+            $name = $property->getName();
+
+            if (in_array($name, $excluded)) {
+                continue;
+            }
+
+            $property->setAccessible(true);
+            $value = $property->getValue($this);
+
+            if ($value instanceof \DateTime) {
+                $value = $value->format('Y-m-d H:i:s');
+            }
+
+            $data[$name] = $value;
+        }
+
+        return $data;
+    }
 }
