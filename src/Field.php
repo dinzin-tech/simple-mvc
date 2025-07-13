@@ -4,15 +4,30 @@ namespace Core;
 
 class Field
 {
-    public string $type;
+    /**
+     * @var string The name of the field.
+     */
     public string $name;
+
+    /**
+     * @var string The type of the field (e.g., text, textarea, select, checkbox, radio, file).
+     */
+    public string $type;
+
+    /**
+     * @var mixed The value of the field.
+     */
     public mixed $value;
+
+    /**
+     * @var array Additional options for the field, such as label, attributes, and options for select fields.
+     */
     public array $options;
 
-    public function __construct(string $type, string $name, mixed $value = null, array $options = [])
+    public function __construct(string $name, string $type, mixed $value = null, array $options = [])
     {
-        $this->type = $type;
         $this->name = $name;
+        $this->type = $type;
         $this->value = $value;
         $this->options = $options;
     }
@@ -67,6 +82,33 @@ class Field
         return $html;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getValue(): mixed
+    {
+        return $this->value;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * Build HTML attributes from an associative array.
+     *
+     * @param array $attributes
+     * @param bool $required
+     * @return string
+     */
     private function buildAttributes(array $attributes = [], bool $required = false): string
     {
         if ($required) {

@@ -53,14 +53,14 @@ class Form
         $this->submitButtonValue = $value;
     }
 
-    public function addField(string $type, string $name, mixed $value = null, array $options = []): void
+    public function addField(string $name, string $type, mixed $value = null, array $options = []): void
     {
-        $this->fields[$name] = new Field($type, $name, $value, $options);
+        $this->fields[$name] = new Field($name, $type, $value, $options);
     }
 
-    public function add(string $type, string $name, mixed $value = null, array $options = []): void
+    public function add(string $name, string $type, mixed $value = null, array $options = []): void
     {
-        $this->addField($type, $name, $value, $options);
+        $this->addField($name, $type, $value, $options);
     }
 
     public function getFields(): array
