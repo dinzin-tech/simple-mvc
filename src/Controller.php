@@ -33,6 +33,10 @@ class Controller {
         // $this->twig->addExtension(new TwigExtension());
         $this->twig->addExtension($twigExtension);
 
+        // Register global variables
+        $this->twig->addGlobal('request', new Request());
+        $this->twig->addGlobal('session', new Session());
+
         // Add debug extension (optional)
         if ($this->twig->isDebug()) {
             $this->twig->addExtension(new \Twig\Extension\DebugExtension());
