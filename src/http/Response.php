@@ -62,5 +62,9 @@ class Response {
         $this->addHeader('Content-Type', 'application/json');
         return $this;
     }
+
+    public function getStatusCode(): int {
+        return $this->statusCode;
+    }
     
 }
