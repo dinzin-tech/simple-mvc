@@ -65,9 +65,8 @@ class Controller {
      * @param int $status The HTTP status code (default: 302)
      * @return void
      */
-    public function redirect(string $url, int $status = 302): void {
-        header('Location: ' . $url, true, $status);
-        exit;
+    public function redirect(string $url, int $status = 302): Response {
+        return new Response('', $status, ['Location' => $url]);
     }
 
     /**

@@ -63,6 +63,9 @@ class Kernel
      */
     public function terminate(Request $request, Response $response): void
     {
+        // Log access to the application
+        Logger::accessLog($request, $response);
+
         // Send the response to the client
         $response->send();
 
