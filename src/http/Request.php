@@ -38,12 +38,32 @@ class Request {
     }
 
     public function get(string $key, $default = null) {
-        return $this->queryParams[$key] ?? $this->postData[$key] ?? $default;
+        return $this->queryParams[$key] ?? $default;
+    }
+
+    public function post(string $key, $default = null): mixed {
+        return $this->postData[$key] ?? $default;
+    }
+
+    public function getQueryParam(string $key, $default = null) {
+        return $this->queryParams[$key] ?? $default;
+    }
+
+    public function getPostParam(string $key, $default = null) {
+        return $this->postData[$key] ?? $default;
     }
 
     public function isHtmx(): bool
     {
         return isset($_SERVER['HTTP_HX_REQUEST']) && $_SERVER['HTTP_HX_REQUEST'] === 'true';
+    }
+
+    public function isAjax(): bool
+    {
+        // return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+           strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
     
 }

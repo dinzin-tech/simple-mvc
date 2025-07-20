@@ -21,7 +21,7 @@
 		public function storeEmail($to, $subject, $message, $headers): bool
 		{
 			// Generate a unique file name
-			$fileName = $this->mailsDirectory . $subject . '_' . date('Y-m-d_H-i-s') . '_' . uniqid() . '.html';
+			$fileName = $this->mailsDirectory . '/'.$subject . '_' . date('Y-m-d_H-i-s') . '_' . uniqid() . '.html';
 			
 			// Prepare the email content
 			$emailContent = "<strong>To:</strong> {$to}<br>";
@@ -39,7 +39,7 @@
 			$this->storeEmail($to, $subject, $message, $headers);
 			
 			//TODO: implement mail() function here
-			mail($to, $subject, $message, $headers);
+			//mail($to, $subject, $message, $headers);
 			
 			return true;
 		}

@@ -10,16 +10,19 @@ use RecursiveIteratorIterator;
 use RegexIterator;
 use Core\Http\Request;
 use Core\Http\Response;
+use Core\Container;
 
 class Router
 {
     protected $routes = [];
     public $response;
     public $matchedRoute = [];
+    public $container;
 
     public function __construct()
     {
         $this->response = new Response();
+        $this->container = new \Core\Container();
 
         // $this->add('/', 'HomeController', 'index', ['GET'], 'home');
     }
@@ -208,7 +211,7 @@ class Router
                     $actionName = $route['action'];
 
                     if (class_exists($controllerName)) {
-                        $controller = new $controllerName();
+                        $controller = $this->container->make($controllerName);
 
                         // logging for debugging
                         $this->matchedRoute = [
@@ -220,19 +223,6 @@ class Router
                         ];
 
                         if (method_exists($controller, $actionName)) {
-                            // $this->response = call_user_func_array(
-                            //     [$controller, $actionName], 
-                            //     array_merge([$request], $matches)
-                            // );
-
-                            // $middlewareRunner = new \Core\MiddlewareHandler($route['middlewares'] ?? []);
-
-                            // $this->response = $middlewareRunner->handle($request, function ($request) use ($controller, $actionName, $matches) {
-                            //     return call_user_func_array(
-                            //         [$controller, $actionName],
-                            //         array_merge([$request], $matches)
-                            //     );
-                            // });
 
                             $middlewareResolver = new \Core\MiddlewareResolver(BASE_PATH . '/config/middlewares.yml');
                             $middlewares = $middlewareResolver->resolve($url);

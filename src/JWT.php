@@ -21,7 +21,7 @@ class JWT {
         return "$base64UrlHeader.$base64UrlPayload.$base64UrlSignature";
     }
 
-    public static function decode($jwt) {
+    /*public static function decode($jwt) {
         $secret = $_ENV['APP_SECRET'];
         [$header, $payload, $signature] = explode('.', $jwt);
         $validSignature = base64_encode(hash_hmac('sha256', "$header.$payload", $secret, true));
@@ -33,6 +33,29 @@ class JWT {
         }
 
         if ($validSignature !== $signature) {
+            throw new Exception('Invalid token signature');
+        }
+
+        return $payloadDecoded;
+    }*/
+
+    public static function decode($jwt) {
+        $secret = $_ENV['APP_SECRET'];
+        
+        [$header, $payload, $signature] = explode('.', $jwt);
+
+        // Recalculate signature in base64url format
+        $rawSignature = hash_hmac('sha256', "$header.$payload", $secret, true);
+        $validSignature = rtrim(strtr(base64_encode($rawSignature), '+/', '-_'), '=');
+
+        // Decode payload
+        $payloadDecoded = json_decode(base64_decode(strtr($payload, '-_', '+/')), true);
+
+        if ($payloadDecoded['exp'] < time()) {
+            throw new Exception('Token expired');
+        }
+
+        if (!hash_equals($validSignature, $signature)) {
             throw new Exception('Invalid token signature');
         }
 

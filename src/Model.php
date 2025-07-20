@@ -140,6 +140,8 @@ abstract class Model {
         $placeholders = ":" . implode(", :", array_keys($data));
         $sql = "INSERT INTO {$this->table} ($columns) VALUES ($placeholders)";
 
+        $data = $this->prepareParams($data);
+
         $this->db->query($sql, $data);
         $this->{$this->primaryKey} = $this->db->lastInsertId();
 
@@ -164,6 +166,9 @@ abstract class Model {
         }
 
         $sql = "UPDATE {$this->table} SET " . implode(", ", $fields) . " WHERE {$this->primaryKey} = :{$this->primaryKey}";
+
+        $data = $this->prepareParams($data);
+
         $this->db->query($sql, $data);
 
         return $this;
@@ -222,6 +227,15 @@ abstract class Model {
             $data[$name] = $value;
         }
 
+        return $data;
+    }
+
+    private function prepareParams(array $data): array {
+        foreach ($data as $key => $value) {
+            if ($value instanceof \DateTime) {
+                $data[$key] = $value->format('Y-m-d H:i:s');
+            }
+        }
         return $data;
     }
 }

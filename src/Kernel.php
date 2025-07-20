@@ -69,7 +69,7 @@ class Kernel
         // Send the response to the client
         $response->send();
 
-        if ($_ENV['DEBUG_MODE'] == 'true') {
+        if ($_ENV['DEBUG_MODE'] == 'true' && !$request->isAjax()) {
             $this->debug->render();
         } // Render debug information at the end
     }

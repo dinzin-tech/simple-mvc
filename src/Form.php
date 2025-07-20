@@ -139,7 +139,7 @@ class Form
                 if ($field->type === 'file') {
                     $this->handleFileUpload($name);
                 } else {
-                    $this->fields[$name]->value = $request->get($name);
+                    $this->fields[$name]->value = $request->post($name);
                 }
             }
         }
@@ -195,7 +195,7 @@ class Form
             }
         }
 
-        if (!$this->validateCSRFToken($request->get('csrf_token'))) {
+        if (!$this->validateCSRFToken($request->post('csrf_token'))) {
             $this->addError('Invalid CSRF token.');
         }
 
