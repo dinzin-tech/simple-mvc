@@ -4,15 +4,19 @@ namespace Core;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use Core\Router;
+use Core\Config;
 
 class TwigExtension extends AbstractExtension
 {
     protected $router;
+    protected $config;
 
     public function __construct()
     {
         $this->router = new Router();
         $this->router->loadRoutes();
+        $this->config = new Config();
     }
 
     /**
@@ -23,6 +27,7 @@ class TwigExtension extends AbstractExtension
         return [
             new TwigFunction('assets', [$this, 'assets']),
             new TwigFunction('route', [$this, 'generateRoute']),
+            new TwigFunction('config', [$this, 'getConfig']),
         ];
     }
 
@@ -77,5 +82,18 @@ class TwigExtension extends AbstractExtension
         }
 
         return $path;
+    }
+
+    /**
+     * Get configuration value.
+     * For example: {{ config('app.name') }}
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getConfig(string $key)
+    {
+        // Assuming you have a Config class that handles configuration values
+        return $this->config->get($key) ?? null;
     }
 }
