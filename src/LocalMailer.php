@@ -5,7 +5,10 @@
 	class LocalMailer
 	{
 		private $mailsDirectory;
-		
+
+		public $loader;
+		public $twig;
+
 		public function __construct($directory = 'mails') {
 			// Set the directory for storing emails
 			$this->mailsDirectory = BASE_PATH . '/' .$directory;
@@ -14,7 +17,11 @@
 			if (!is_dir($this->mailsDirectory)) {
 				mkdir($this->mailsDirectory, 0755, true);
 			}
-			
+
+			// twig template for email
+			$this->loader = new \Twig\Loader\FilesystemLoader(BASE_PATH . '/app/views');
+			$this->twig = new \Twig\Environment($this->loader);
+
 			//TODO: fetch SMPT config data etc.
 		}
 		
