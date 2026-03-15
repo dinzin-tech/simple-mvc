@@ -66,5 +66,14 @@ class Response {
     public function getStatusCode(): int {
         return $this->statusCode;
     }
+
+    public function getHeader(string $name): ?string {
+        return $this->headers[$name] ?? null;
+    }
+
+    public function isJson(): bool {
+        $contentType = $this->getHeader('Content-Type');
+        return $contentType !== null && strpos(strtolower($contentType), 'application/json') !== false;
+    }
     
 }
