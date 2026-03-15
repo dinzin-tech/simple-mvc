@@ -43,15 +43,30 @@ class CommandManager
         // Currently, commands are statically defined in the $commands array.
         // You can add logic here to load commands from a directory or configuration file.
 
-        // Example: Load commands from a specific directory
-        $commandFiles = glob(BASE_PATH_IN_COMMANDS . '/commands/*.php');
+        // Scan for commands in multiple locations for backward compatibility
+        $directories = [
+            BASE_PATH_IN_COMMANDS . '/app/Commands',
+            BASE_PATH_IN_COMMANDS . '/commands'
+        ];
 
-        foreach ($commandFiles as $commandFile) {
-            $commandClass = 'App\\Commands\\' . basename($commandFile, '.php');
-            $commandName = strtolower(str_replace('Command', '', basename($commandFile, '.php')));
+        foreach ($directories as $directory) {
+            if (!is_dir($directory)) continue;
 
-            if (class_exists($commandClass) && !isset($this->commands[$commandName]) && method_exists($commandClass, 'execute')) {
-                $this->commands[$commandName] = $commandClass;
+            $commandFiles = glob($directory . '/*.php');
+
+            foreach ($commandFiles as $commandFile) {
+                // Determine the namespace based on the folder
+                $isLegacy = strpos($directory, '/commands') !== false && strpos($directory, '/app/Commands') === false;
+                $namespace = $isLegacy ? 'App\\Commands\\' : 'App\\Commands\\'; 
+                // Note: Both directories typically use App\Commands namespace in this project structure for consistency,
+                // but let's assume PSR-4 maps both if they exist.
+                
+                $commandClass = 'App\\Commands\\' . basename($commandFile, '.php');
+                $commandName = strtolower(str_replace('Command', '', basename($commandFile, '.php')));
+
+                if (class_exists($commandClass) && !isset($this->commands[$commandName]) && method_exists($commandClass, 'execute')) {
+                    $this->commands[$commandName] = $commandClass;
+                }
             }
         }
 

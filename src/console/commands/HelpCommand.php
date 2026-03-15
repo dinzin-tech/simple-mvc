@@ -48,17 +48,23 @@ class HelpCommand
         // echo "  For more information on how to use the console, visit the documentation at:\n";
 
         // scan the commands directory for additional commands
-        $commandsDir = BASE_PATH_IN_COMMANDS . '/commands';
-        if (is_dir($commandsDir)) {
-            $commandFiles = glob($commandsDir . '/*.php');
-            if (!empty($commandFiles)) {
-                echo "  Custom App Commands:\n";
-                foreach ($commandFiles as $file) {
-                    $commandName = basename($file, '.php');
-                    $displayName = strtolower(str_replace('Command', '', $commandName));
-                    echo "    - " . $displayName . "\n";
+        $directories = [
+            'Standard App Commands' => BASE_PATH_IN_COMMANDS . '/app/Commands',
+            'Legacy Root Commands' => BASE_PATH_IN_COMMANDS . '/commands'
+        ];
+
+        foreach ($directories as $label => $dir) {
+            if (is_dir($dir)) {
+                $commandFiles = glob($dir . '/*.php');
+                if (!empty($commandFiles)) {
+                    echo "  {$label}:\n";
+                    foreach ($commandFiles as $file) {
+                        $commandName = basename($file, '.php');
+                        $displayName = strtolower(str_replace('Command', '', $commandName));
+                        echo "    - " . $displayName . "\n";
+                    }
+                    echo "  ---------------------------------------------------------------\n\r";
                 }
-                echo "  ---------------------------------------------------------------\n\r";
             }
         }
     }
