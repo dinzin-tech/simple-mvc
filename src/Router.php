@@ -28,6 +28,16 @@ class Router
     }
 
     /**
+     * Get the registered routes.
+     * 
+     * @return array
+     */
+    public function getRoutes(): array
+    {
+        return $this->routes;
+    }
+
+    /**
      * Scan all controllers in the App\Controllers directory and register routes from annotations.
      */
     public function scanControllers()
@@ -62,14 +72,18 @@ class Router
     }
 
     /**
-     * Load routes from the routes.php file.
+     * Load routes from the routes.php file or cache.
      * 
      */
     public function loadRoutes()
     {
-        $this->scanControllers();
-        // add routes from the routes.php file if needed
-        // require_once dirname(__DIR__) . '/routes.php';
+        $cacheFile = BASE_PATH . '/cache/routes.php';
+
+        if (file_exists($cacheFile) && $_ENV['DEBUG_MODE'] !== 'true') {
+            $this->routes = require $cacheFile;
+        } else {
+            $this->scanControllers();
+        }
 
         // load middlewares if any
         $this->loadMiddlewareConfig(BASE_PATH . '/config/middlewares.yml');

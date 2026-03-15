@@ -27,7 +27,14 @@ class Kernel
         $this->debug = new Debug($this->router);
 
         // define the configuration
-        define('BASE_PATH', dirname(__DIR__, 4));
+        // Try to rely on the current working directory first (since users run from app root)
+        $cwd = getcwd();
+        if (file_exists($cwd . '/public/index.php') || file_exists($cwd . '/dev-router.php')) {
+            define('BASE_PATH', $cwd);
+        } else {
+            // Fallback: assuming vendor/dinzin-tech/simple-mvc/src/
+            define('BASE_PATH', dirname(__DIR__, 4));
+        }
 
         // Load the routes
         $this->router->loadRoutes();

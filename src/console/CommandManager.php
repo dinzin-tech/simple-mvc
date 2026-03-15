@@ -14,11 +14,25 @@ class CommandManager
         'help' => 'Core\Console\Commands\HelpCommand',
         '-h' => 'Core\Console\Commands\HelpCommand',
         'console:setup' => 'Core\Console\Commands\ConsoleSetupCommand',
+        'route:cache' => 'Core\Console\Commands\RouteCacheCommand',
+        'route:clear' => 'Core\Console\Commands\RouteClearCommand',
     ];
 
     public function init()
     {
-        define('BASE_PATH_IN_COMMANDS', dirname(__DIR__, 5));
+        // Try to rely on the current working directory first (since users run php bin/console from app root)
+        $cwd = getcwd();
+        if (file_exists($cwd . '/bin/console') || file_exists($cwd . '/public/index.php')) {
+            define('BASE_PATH_IN_COMMANDS', $cwd);
+        } else {
+            // Fallback: assuming vendor/dinzin-tech/simple-mvc/src/console
+            define('BASE_PATH_IN_COMMANDS', dirname(__DIR__, 4));
+        }
+        
+        // Router and Models rely on BASE_PATH which is normally defined in Kernel.php
+        if (!defined('BASE_PATH')) {
+            define('BASE_PATH', BASE_PATH_IN_COMMANDS);
+        }
         
         $this->registerCommands();
     }

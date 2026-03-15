@@ -211,7 +211,7 @@ class Debug
                         $defined_constants = get_defined_constants();
                         $defined_constants = array_reverse($defined_constants, true);
                         foreach ($defined_constants as $key => $value) {
-                            echo '<li style="color: #ccc;">' . htmlspecialchars($key) . ' => ' . htmlspecialchars($value) . '</li>';
+                            echo '<li style="color: #ccc;">' . htmlspecialchars((string)$key) . ' => ' . htmlspecialchars((string)$value) . '</li>';
                         }
 
         echo '          </ul>
