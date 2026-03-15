@@ -48,20 +48,18 @@ class HelpCommand
         // echo "  For more information on how to use the console, visit the documentation at:\n";
 
         // scan the commands directory for additional commands
-        // $commandsDir = BASE_PATH_IN_COMMANDS . '/commands';
-        // if (is_dir($commandsDir)) {
-        //     $commandFiles = glob($commandsDir . '/*.php');
-        //     if (!empty($commandFiles)) {
-        //         echo "  Available commands:\n";
-        //         foreach ($commandFiles as $file) {
-        //             $commandName = basename($file, '.php');
-        //             echo "    - " . strtolower(str_replace('Command', '', $commandName)) . "\n";
-        //         }
-        //     } else {
-        //         echo "  No additional commands found in the 'commands' directory.\n";
-        //     }
-        // } else {
-        //     echo "  The 'commands' directory does not exist.\n";
-        // }
+        $commandsDir = BASE_PATH_IN_COMMANDS . '/commands';
+        if (is_dir($commandsDir)) {
+            $commandFiles = glob($commandsDir . '/*.php');
+            if (!empty($commandFiles)) {
+                echo "  Custom App Commands:\n";
+                foreach ($commandFiles as $file) {
+                    $commandName = basename($file, '.php');
+                    $displayName = strtolower(str_replace('Command', '', $commandName));
+                    echo "    - " . $displayName . "\n";
+                }
+                echo "  ---------------------------------------------------------------\n\r";
+            }
+        }
     }
 }

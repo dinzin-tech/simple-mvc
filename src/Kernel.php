@@ -56,7 +56,7 @@ class Kernel
     public function handle(Request $request)
     {
         // Dispatch the request to the router
-        $this->router->dispatch($request->getUri());
+        $this->router->dispatch($request->getUri(), $request);
 
         // Return the response from the router
         return $this->router->response;

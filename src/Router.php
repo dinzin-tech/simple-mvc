@@ -206,10 +206,10 @@ class Router
         ];
     }
 
-    public function dispatch($url)
+    public function dispatch($url, ?Request $request = null)
     {
         $url = ($url != '/') ? rtrim($url, '/') : $url;
-        $request = new Request();
+        $request = $request ?? new Request();
         
         foreach ($this->routes as $routeUrl => $route) {
             $pattern = preg_replace('/{(\w+)}/', '([^/]+)', $routeUrl);
@@ -218,7 +218,7 @@ class Router
             if (preg_match($pattern, $url, $matches)) {
                 array_shift($matches); // Remove full match
 
-                $method = $_SERVER['REQUEST_METHOD'];
+                $method = $request->getMethod();
 
                 if (in_array($method, $route['methods'])) {
                     $controllerName = 'App\\Controllers\\' . $route['controller'];

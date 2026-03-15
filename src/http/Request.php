@@ -11,7 +11,8 @@ class Request {
 
     public function __construct() {
         $this->method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $this->uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $this->uri = parse_url($uri, PHP_URL_PATH);
         $this->queryParams = $_GET;
         $this->postData = $_POST;
     }
