@@ -38,7 +38,18 @@
             self::ensureMigrationsTableExists();
             $executed = self::getExecutedMigrations();
 
+            if (!is_dir(self::$migrationsPath)) {
+                echo "-- Migration directory not found. Please run 'migrations:create' first.\n";
+                return;
+            }
+
             $allFiles = array_filter(scandir(self::$migrationsPath), fn($f) => str_ends_with($f, '.php'));
+            
+            if (empty($allFiles)) {
+                echo "-- No migration files found. Please run 'migrations:create' first.\n";
+                return;
+            }
+
             $pending = array_diff($allFiles, $executed);
 
             if (empty($pending)) {
@@ -88,7 +99,18 @@
             self::ensureMigrationsTableExists();
 
             $executed = self::getExecutedMigrations();
+            
+            if (!is_dir(self::$migrationsPath)) {
+                echo "-- Migration directory not found. Please run 'migrations:create' first.\n";
+                return;
+            }
+
             $allFiles = array_filter(scandir(self::$migrationsPath), fn($f) => str_ends_with($f, '.php'));
+
+            if (empty($allFiles)) {
+                echo "-- No migration files found. Please run 'migrations:create' first.\n";
+                return;
+            }
 
             echo "=== Migration Status ===\n";
 
