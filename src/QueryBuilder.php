@@ -65,6 +65,47 @@ class QueryBuilder {
         return $this;
     }
 
+    public function whereIn(string $column, array $values): self {
+        return $this->addInCondition('AND', $column, $values);
+    }
+
+    public function orWhereIn(string $column, array $values): self {
+        return $this->addInCondition('OR', $column, $values);
+    }
+
+    protected function addInCondition(string $type, string $column, array $values): self {
+        if (empty($values)) {
+            // If empty, we add a condition that always fails
+            $this->wheres[] = [
+                'type' => $type,
+                'column' => '0',
+                'operator' => '=',
+                'value' => '1',
+                'param' => null,
+                'isIn' => false
+            ];
+            return $this;
+        }
+
+        $params = [];
+        foreach ($values as $index => $value) {
+            $paramName = str_replace('.', '_', $column) . '_in_' . count($this->bindings);
+            $this->bindings[$paramName] = $value;
+            $params[] = ":$paramName";
+        }
+
+        $this->wheres[] = [
+            'type' => $type,
+            'column' => $column,
+            'operator' => 'IN',
+            'value' => $values,
+            'params' => $params,
+            'isIn' => true
+        ];
+
+        return $this;
+    }
+
     public function join(string $table, string $first, string $operator, string $second, string $type = 'INNER'): self {
         $this->joins[] = "$type JOIN $table ON $first $operator $second";
         return $this;
@@ -190,7 +231,16 @@ class QueryBuilder {
             if ($index > 0) {
                 $clause .= " {$where['type']} ";
             }
-            $clause .= "{$where['column']} {$where['operator']} :{$where['param']}";
+
+            if (isset($where['isIn']) && $where['isIn']) {
+                $placeholders = implode(', ', $where['params']);
+                $clause .= "{$where['column']} IN ($placeholders)";
+            } elseif (isset($where['param'])) {
+                $clause .= "{$where['column']} {$where['operator']} :{$where['param']}";
+            } else {
+                // Fallback for empty IN or static conditions
+                $clause .= "{$where['column']} {$where['operator']} {$where['value']}";
+            }
         }
         
         return $clause;
