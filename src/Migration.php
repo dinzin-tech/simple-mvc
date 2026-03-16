@@ -219,7 +219,7 @@
                 sleep(1); // Simulate processing time
 
                 foreach ($sqls as $description => [$upSql, $downSql]) {
-                    $migrationClassName = $description .'_'. date('YmdHis');
+                    $migrationClassName = 'm' . date('YmdHis') . '_' . $description;
                     $filename = $migrationClassName . '.php';
                     $filepath = self::$migrationsPath . '/' . $filename;
 
@@ -345,7 +345,7 @@ PHP;
                 foreach ((new ReflectionClass($modelClass))->getProperties() as $prop) {
                     if ($prop->getName() === 'id' || $prop->getDeclaringClass()->getName() === 'Core\Model' || $prop->isStatic()) continue;
 
-                    [$col, $typeDef, $indexDefs, $fk] = self::mapPropertyToColumn($prop);
+                    [$col, $typeDef, $indexDefs, $fk] = self::mapPropertyToColumn($prop, $table);
 
                     $columns[] = "`$col` $typeDef";
                     $indexes = array_merge($indexes, $indexDefs);
@@ -366,7 +366,7 @@ PHP;
 
                 foreach ($modelProps as $prop) {
                     if ($prop->getName() === 'id' || $prop->getDeclaringClass()->getName() === 'Core\Model' || $prop->isStatic()) continue;
-                    [$col, $typeDef, $indexDefs, $fk] = self::mapPropertyToColumn($prop);
+                    [$col, $typeDef, $indexDefs, $fk] = self::mapPropertyToColumn($prop, $table);
                     $modelMap[$col] = [$typeDef, $indexDefs, $fk];
                 }
 
@@ -448,7 +448,7 @@ PHP;
             return [$name, "$sqlType $nullable"];
         }*/
 
-        private static function mapPropertyToColumn(ReflectionProperty $property): array {
+        private static function mapPropertyToColumn(ReflectionProperty $property, string $tableName): array {
             $name = $property->getName();
             $type = 'VARCHAR(255)';
             $nullable = 'NULL';
@@ -535,7 +535,7 @@ PHP;
             // Foreign Key
             $foreignKey = null;
             if ($attr->foreignKeyTable) {
-                $fkName = "fk_{$colName}_{$attr->foreignKeyTable}";
+                $fkName = "fk_{$tableName}_{$colName}";
                 $foreignKey = "CONSTRAINT `$fkName` FOREIGN KEY (`$colName`) REFERENCES `{$attr->foreignKeyTable}`(`{$attr->foreignKeyColumn}`) ON DELETE CASCADE";
             }
 
