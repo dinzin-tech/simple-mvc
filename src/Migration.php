@@ -57,6 +57,8 @@
                 return;
             }
 
+            Database::getInstance()->query("SET FOREIGN_KEY_CHECKS = 0;");
+
             foreach ($pending as $file) {
                 $class = self::requireMigrationClass($file);
 
@@ -71,6 +73,8 @@
                 echo "-- Completed: $file\n";
                 sleep(1);
             }
+
+            Database::getInstance()->query("SET FOREIGN_KEY_CHECKS = 1;");
         }
 
         public static function rollback(): void
@@ -539,7 +543,7 @@ PHP;
                 $foreignKey = "CONSTRAINT `$fkName` FOREIGN KEY (`$colName`) REFERENCES `{$attr->foreignKeyTable}`(`{$attr->foreignKeyColumn}`) ON DELETE CASCADE";
             }
 
-            $definition = "$type $nullable$default$extra";
+            $definition = "$type $nullable$default$extra $attr->extra";
             return [$colName, $definition, $indexes, $foreignKey];
         }
 

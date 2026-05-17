@@ -39,6 +39,9 @@ class HelpCommand
         echo "  migrations status           - Show migration status\n";
         echo "  migrations rollback         - Rollback migration\n";
         echo "  ---------------------------------------------------------------\n\r";
+        echo "  route:cache                 - Cache the routes\n";
+        echo "  route:clear                 - Clear the route cache\n";
+        echo "  ---------------------------------------------------------------\n\r";
 
         // show the commands registered in the CommandManager
         // echo "  Additional commands can be registered in the CommandManager.\n";
@@ -50,7 +53,8 @@ class HelpCommand
         // scan the commands directory for additional commands
         $directories = [
             'Standard App Commands' => BASE_PATH_IN_COMMANDS . '/app/Commands',
-            'Legacy Root Commands' => BASE_PATH_IN_COMMANDS . '/commands'
+            'Legacy Root Commands' => BASE_PATH_IN_COMMANDS . '/commands',
+            'Core Console Commands' => BASE_PATH_IN_COMMANDS . '/src/console/commands'
         ];
 
         foreach ($directories as $label => $dir) {

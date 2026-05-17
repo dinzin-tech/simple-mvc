@@ -21,6 +21,7 @@ class Column {
         public string $foreignKeyTable = '',
         public string $foreignKeyColumn = 'id',
         public string $name = '',
-        public string $customSqlType = ''
+        public string $customSqlType = '',
+        public string $extra = ''
     ) {}
 }
